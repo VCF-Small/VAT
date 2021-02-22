@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var connection = require('./db');
 var bcrypt = require('bcrypt');
+const { body, validationResults } = require('express-validator');
 
 //display login page
 router.get('/', function (req, res, next) {
@@ -58,57 +59,49 @@ router.get('/register', function (req, res, next) {
 });
 
 // user registration
-router.post('/post', function (req, res, next) {
+router.post('/post', body('username').isAlphanumeric(), body('email').isEmail(), body('password').isLength({ min: 6 }), function (req, res, next) {
     // console.log("In post-register");
-    req.assert('username', "Username is required").notEmpty();
-    req.assert('username', 'Username is required').notEmpty();          //Validate name
-    req.assert('email', 'A valid email is required').isEmail();  //Validate email
-    req.assert('password', 'Password is required').notEmpty();   //Validate password
-    req.assert('password', 'Password length must be in between 6 to 16').isLength({ min: 6, max: 16 });   //Validate password
-    if (req.sanitize('password').escape().trim() == req.sanitize('password_repeat').escape().trim()) {
-        var errors = req.validationErrors();
-        if (!errors) {   //No errors were found.  Passed Validation!
-            username = req.sanitize('username').escape().trim();
-            email = req.sanitize('email').escape().trim();
-            DateOfBirth = req.sanitize('DateOfBirth').escape().trim();
-            PhoneNumber = req.sanitize('PhoneNumber').escape().trim();
-            address = req.sanitize('address').escape().trim();
-            password = req.sanitize('password').escape().trim();
-            var hashedPassword = bcrypt.hash(password, 10);
-            connection.query("INSERT INTO `useradmins` (`UserID`, `email`, `DOB`, `address`, `PhoneNumber`, `password`) VALUES ('" + username + "', '" + email + "', '" + DateOfBirth + "', '" + address + "','" + PhoneNumber + "','" + hashedPassword + "')", function (err, result) {
-                //if(err) throw err
-                if (err) {
-                    res.render('register', {
-                        title: ' VAT',
-                        username: '',
-                        email: '',
-                        DateOfBirth: '',
-                        address: '',
-                        PhoneNumber: '',
-                        password: '',
-                        password_repeat: ''
-                    });
-                }
-            });
-        }
-        else {   //Display errors to user
-            var error_msg = '';
-            errors.forEach(function (error) {
-                error_msg += error.msg + '<br>';
-            });
-            res.render('register', {
-                title: 'VAT',
-                username: req.body.username,
-                email: req.body.email,
-                DateOfBirth: req.body.DateOfBirth,
-                address: req.body.address,
-                PhoneNumber: req.body.PhoneNumber,
-                password: '',
-                password_repeat: ''
-            });
-        }
-    } else {
-        alert('Password and Password(repeat) should be same');
+    const { password, password_repeat } = req.body;
+    if (password === password_repeat) {
+        //No errors were found.  Passed Validation!
+        username = req.body.username;
+        email = req.body.email;
+        DateOfBirth = req.body.DateOfBirth;
+        PhoneNumber = req.body.PhoneNumber;
+        address = req.body.address;
+        passwords = req.body.password;
+        var hashedPassword = bcrypt.hash(passwords, 10);
+        connection.query("INSERT INTO `useradmins` (`UserID`, `email`, `DOB`, `address`, `PhoneNumber`, `password`) VALUES ('" + username + "', '" + email + "', '" + DateOfBirth + "', '" + address + "','" + PhoneNumber + "','" + hashedPassword + "')", function (err, result) {
+            //if(err) throw err
+            if (err) {
+                res.render('register', {
+                    title: ' VAT',
+                    username: '',
+                    email: '',
+                    DateOfBirth: '',
+                    address: '',
+                    PhoneNumber: '',
+                    password: '',
+                    password_repeat: ''
+                });
+            } else{
+                res.render('login', {
+                    title: 'VAT',
+                    message: {
+                        error: '',
+                        success: ''
+                    },
+                    username: '',
+                    password: ''
+                });
+            }
+    });
+}
+    else {   //Display errors to user
+        var error_msg = '';
+        errors.forEach(function (error) {
+            error_msg += error.msg + '<br>';
+        });
         res.render('register', {
             title: 'VAT',
             username: req.body.username,
@@ -120,7 +113,6 @@ router.post('/post', function (req, res, next) {
             password_repeat: ''
         });
     }
-
 });
 
 

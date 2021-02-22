@@ -1,38 +1,26 @@
 {
-  "name": "vat",
+  "name": "AdminPanal",
   "version": "1.0.0",
-  "description": "Attendance tracking System",
-  "main": "index.js",
+  "description": "",
+  "main": "auth.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "devStart": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/VCF-Small/VAT.git"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/VCF-Small/VAT/issues"
-  },
-  "homepage": "https://github.com/VCF-Small/VAT#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
-    "ejs": "^3.1.5",
     "express": "^4.17.1",
     "express-flash": "0.0.2",
     "express-session": "^1.17.1",
-    "express-validator": "^5.3.1",
+    "express-validator": "^6.9.2",
     "http-errors": "^1.8.0",
-    "method-override": "^3.0.0",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "nodemon": "^2.0.7",
     "path": "^0.12.7"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.7"
-  },
-  "keywords": []
+  }
 }
