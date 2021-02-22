@@ -84,7 +84,7 @@ router.post('/post', body('username').isAlphanumeric(), body('email').isEmail(),
                     password: '',
                     password_repeat: ''
                 });
-            } else{
+            } else {
                 res.render('login', {
                     title: 'VAT',
                     message: {
@@ -95,8 +95,8 @@ router.post('/post', body('username').isAlphanumeric(), body('email').isEmail(),
                     password: ''
                 });
             }
-    });
-}
+        });
+    }
     else {   //Display errors to user
         var error_msg = '';
         errors.forEach(function (error) {
@@ -125,7 +125,7 @@ router.get('/Admin', function (req, res, next) {
         });
     } else {
         // alert('Please login first!');
-        // req.flash('success', 'Please login first!');
+        req.flash('success', 'Please login first!');
         res.redirect('/');
     }
 });
@@ -138,7 +138,7 @@ router.get('/About', function (req, res, next) {
         });
     } else {
         // alert('Please login first!');
-        // req.flash('success', 'Please login first!');
+        req.flash('success', 'Please login first!');
         res.redirect('/');
     }
 });
