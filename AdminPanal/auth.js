@@ -18,6 +18,7 @@ router.get('/', function (req, res, next) {
     });
 });
 
+
 //authenticate user
 router.post('/authentication', function (req, res, next) {
     var username = req.body.username;
