@@ -144,4 +144,17 @@ router.get('/About', function (req, res, next) {
     }
 });
 
+router.get('/AddEmployee', function (req, res, next) {
+    if (req.session.loggedin) {
+        res.render('AddEmployee', {
+            title: "VAT",
+            username: req.session.name,
+        });
+    } else {
+        // alert('Please login first!');
+        req.flash('success', 'Please login first!');
+        res.redirect('/');
+    }
+});
+
 module.exports = router;
